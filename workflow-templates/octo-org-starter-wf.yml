@@ -1,19 +1,18 @@
 name: Equalizer999 Organization CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ $default-branch ]
   pull_request:
     branches: [ $default-branch ]
 
 jobs:
-  build:
+  fetch_data:
+    uses: equalizer999-sandbox-playground/cicd-common/.github/workflows/rewf-with-output.yml@main
+
+  post_result:
     runs-on: ubuntu-latest
-
+    needs: fetch_data
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Run a one-line script
-        run: echo Hello from Octo Organization
-      - name: Call reusable workflow
-        run: echo Hello from Octo Organization
+      - run: echo ${{ needs.fetch_data.outputs.firstword }} ${{ needs.fetch_data.outputs.secondword }}
